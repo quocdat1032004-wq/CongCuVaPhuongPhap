@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Lịch Sử Hóa Đơn{% endblock %}
+
+{% block content %}
+<h2>Lịch Sử Hóa Đơn</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mã Hóa Đơn</th>
+            <th>Người Tạo/Đặt hàng</th>
+            <th>Ngày Tạo</th>
+            <th>Tổng Tiền</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.MaHoaDon }}</td>
+            {# SỬ DỤNG relationship mới 'nguoi_tao' #}
+            <td>{{ order.nguoi_tao.HoTen if order.nguoi_tao else 'N/A' }}</td>
+            <td>{{ order.NgayTao.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+            <td>{{ "{:,.0f}".format(order.TongTien) }} VNĐ</td>
+            <td>{{ order.TrangThaiDonHang }}</td>
+            <td>
+                <a href="{{ url_for('order.view_order', order_id=order.MaHoaDon) }}" class="btn btn-sm btn-info">Xem Chi tiết</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

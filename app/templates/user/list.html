@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Quản lý Người dùng{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Danh sách Người dùng</h2>
+    <a href="{{ url_for('user.add_user') }}" class="btn btn-primary">Thêm người dùng mới</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ Tên</th>
+            <th>Tên Đăng Nhập</th>
+            <th>Vai Trò</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.MaNguoiDung }}</td>
+            <td>{{ user.HoTen }}</td>
+            <td>{{ user.TenDangNhap }}</td>
+            {# Truy cập Tên Vai Trò thông qua relationship 'vai_tro' đã định nghĩa trong models.py #}
+            <td>{{ user.vai_tro.TenVaiTro if user.vai_tro else 'N/A' }}</td>
+            <td>
+                {# Hiển thị trạng thái dưới dạng Badge #}
+                {% if user.TrangThai == 'active' %}
+                    <span class="badge bg-success">Hoạt động</span>
+                {% elif user.TrangThai == 'locked' %}
+                    <span class="badge bg-danger">Khóa</span>
+                {% else %}
+                    {{ user.TrangThai }}
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('user.edit_user', user_id=user.MaNguoiDung) }}" class="btn btn-sm btn-warning">Sửa</a>
+                
+                {# Ngăn không cho Quản lý tự khóa tài khoản của mình #}
+                {% if user.MaNguoiDung != current_user.MaNguoiDung %}
+                    <form method="POST" action="{{ url_for('user.delete_user', user_id=user.MaNguoiDung) }}" style="display:inline;">
+                        {# Lưu ý: Theo code hiện tại, hành động này sẽ KHÓA tài khoản chứ không xóa hẳn #}
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn khóa tài khoản này?')">Khóa</button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="text-center">Chưa có người dùng nào trong hệ thống.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

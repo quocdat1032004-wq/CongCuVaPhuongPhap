@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Báo cáo Doanh thu{% endblock %}
+{% block content %}
+<h2>Báo cáo Doanh thu - {{ title }}</h2>
+<div class="btn-group mb-3">
+    <a href="{{ url_for('report.revenue_report', period='today') }}" class="btn btn-outline-primary {{ 'active' if current_period == 'today' }}">Hôm nay</a>
+    <a href="{{ url_for('report.revenue_report', period='weekly') }}" class="btn btn-outline-primary {{ 'active' if current_period == 'weekly' }}">Tuần này</a>
+    <a href="{{ url_for('report.revenue_report', period='monthly') }}" class="btn btn-outline-primary {{ 'active' if current_period == 'monthly' }}">Tháng này</a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Tổng doanh thu: {{ "{:,.0f}".format(total_revenue) }} VNĐ</h4>
+    </div>
+</div>
+<h3 class="mt-4">Các hóa đơn trong kỳ</h3>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Mã Hóa Đơn</th>
+            <th>Ngày Tạo</th>
+            <th>Tổng Tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.MaHoaDon }}</td>
+            <td>{{ order.NgayTao.strftime('%d-%m-%Y %H:%M') }}</td>
+            <td>{{ "{:,.0f}".format(order.TongTien) }} VNĐ</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">Không có hóa đơn nào trong kỳ này.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

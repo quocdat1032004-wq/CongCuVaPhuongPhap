@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Thực đơn{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Danh sách Món ăn</h2>
+        
+        {# Chỉ hiển thị nút Thêm mới cho Quản lý/Nhân viên #}
+        {% if current_user.is_authenticated and current_user.vai_tro.TenVaiTro in ['Quản lý', 'Nhân viên'] %}
+            <a href="{{ url_for('menu.add_dish') }}" class="btn btn-primary">Thêm món mới</a>
+        {% endif %}
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Mã Món</th>
+                <th>Tên Món Ăn</th>
+                <th>Đơn Giá</th>
+                <th>Trạng Thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {# Chỉ cần MỘT vòng lặp duy nhất #}
+            {% for dish in dishes %}
+            <tr>
+                <td>{{ dish.MaMonAn }}</td>
+                <td>{{ dish.TenMonAn }}</td>
+                <td>{{ "{:,.0f}".format(dish.DonGia) }} VNĐ</td>
+                <td>
+                    {% if dish.TrangThaiBan == 'selling' %}
+                        <span class="badge bg-success">Đang bán</span>
+                    {% elif dish.TrangThaiBan == 'stopped' %}
+                        <span class="badge bg-warning text-dark">Ngừng bán</span>
+                    {% elif dish.TrangThaiBan == 'sold_out' %}
+                        <span class="badge bg-secondary">Hết hàng</span>
+                    {% else %}
+                        {{ dish.TrangThaiBan }}
+                    {% endif %}
+                </td>
+                <td>
+                    {# Hành động cho Quản lý/Nhân viên #}
+                    {% if current_user.is_authenticated and current_user.vai_tro.TenVaiTro in ['Quản lý', 'Nhân viên'] %}
+                        <a href="{{ url_for('menu.edit_dish', dish_id=dish.MaMonAn) }}"
+                           class="btn btn-sm btn-warning">Sửa</a>
+                        <form method="POST"
+                              action="{{ url_for('menu.delete_dish', dish_id=dish.MaMonAn) }}"
+                              style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-danger"
+                                  onclick="return confirm('Xóa món này?')">Xóa</button>
+                        </form>
+                    
+                    {# Hành động cho Thực khách #}
+                    {% elif current_user.is_authenticated and current_user.vai_tro.TenVaiTro == 'Thực khách' %}
+                        {% if dish.TrangThaiBan == 'selling' %}
+                            <form method="POST" action="{{ url_for('customer.add_to_cart', dish_id=dish.MaMonAn) }}" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-primary">Thêm vào giỏ</button>
+                            </form>
+                        {% else %}
+                            <button class="btn btn-sm btn-secondary" disabled>Không khả dụng</button>
+                        {% endif %}
+
+                    {# Hành động cho khách vãng lai #}
+                    {% elif not current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-info">Đăng nhập để đặt</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">Chưa có món ăn nào trong thực đơn.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

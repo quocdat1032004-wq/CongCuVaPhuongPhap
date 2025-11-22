@@ -1,0 +1,10 @@
+Flask>=2.2,<3
+Flask-Login>=0.6
+Flask-WTF>=1.1
+Flask-SQLAlchemy>=3.0
+SQLAlchemy>=1.4
+python-dotenv>=1.0
+WTForms>=3.0
+Werkzeug>=2.2
+reportlab>=3.6      # used by app/routes/report_routes.py for PDF export
+pyodbc>=4.0         # used by check_db.py for DB driver checks
