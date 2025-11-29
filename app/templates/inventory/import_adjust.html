@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{{ action }}{% endblock %}
+{% block content %}
+<h2>{{ action }}</h2>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    {% if item %}
+        <div class="mb-3">
+            <label class="form-label">Tên hàng</label>
+            <input type="text" class="form-control" value="{{ item.TenHang }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            {{ form.loai.label(class="form-label") }}
+            {{ form.loai(class="form-select") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.so_luong_dieu_chinh.label(class="form-label") }}
+            {{ form.so_luong_dieu_chinh(class="form-control", min="1") }}
+            {% for error in form.so_luong_dieu_chinh.errors %}
+                <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+            <small class="text-muted">Tồn hiện tại: {{ item.SoLuongTon }}</small>
+        </div>
+
+        <div class="mb-3">
+            {{ form.ly_do.label(class="form-label") }}
+            {{ form.ly_do(class="form-control", rows="2") }}
+        </div>
+    {% else %}
+        <div class="mb-3">
+            {{ form.ten_hang.label(class="form-label") }}
+            {{ form.ten_hang(class="form-control") }}
+            {% for error in form.ten_hang.errors %}
+                <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+            <small class="form-text text-muted">Nếu tên hàng đã có, hệ thống sẽ cộng dồn số lượng.</small>
+        </div>
+
+        <div class="mb-3">
+            {{ form.so_luong.label(class="form-label") }}
+            {{ form.so_luong(class="form-control", min="1") }}
+            {% for error in form.so_luong.errors %}
+                <small class="text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.don_vi_tinh.label(class="form-label") }}
+            {{ form.don_vi_tinh(class="form-control", placeholder="VD: kg, thùng, chai...") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.nguong_canh_bao.label(class="form-label") }}
+            {{ form.nguong_canh_bao(class="form-control", min="0") }}
+        </div>
+    {% endif %}
+
+    {{ form.submit(class="btn btn-success") }}
+    <a href="{{ url_for('inventory.list_items') }}" class="btn btn-secondary">Hủy</a>
+</form>
+{% endblock %}
