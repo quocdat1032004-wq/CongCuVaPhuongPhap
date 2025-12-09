@@ -67,33 +67,3 @@ python run.py
 
 Sau đó mở trình duyệt tại `http://127.0.0.1:5000` (mặc định)
 
-**Gợi ý hữu ích**
-
-- Nếu cần tạo hoặc hash mật khẩu mẫu, sử dụng `hash_passwords.py` (xem nội dung file để biết cách dùng)
-- Routes chính nằm trong `app/routes/` — sửa nếu muốn thay đổi endpoint
-- Templates ở `app/templates/` và các include như `_navbar` để thay đổi layout
-
-**Cấu trúc phát triển & đóng góp**
-
-- Fork / clone repo
-- Tạo branch cho tính năng: `feature/<mota>`
-- Viết code và tests (nếu có)
-- Mở pull request với mô tả rõ ràng
-
-**Vấn đề thường gặp**
-
-- Thiếu package: chạy `pip install -r requirements.txt`
-- Lỗi DB: kiểm tra cấu hình DB, xem `check_db.py` hoặc file cấu hình
-
-**License**
-
-Tùy chỉnh theo nhu cầu — hiện mặc định chưa có license. Thêm file `LICENSE` nếu muốn.
-
----
-
-Nếu bạn muốn, tôi có thể:
-- Thêm phần "Môi trường biến môi trường" chi tiết nếu dự án dùng `.env`.
-- Tự động thêm một ví dụ `requirements.txt` đã tồn tại hoặc kiểm tra `run.py` để xác nhận lệnh chạy chính xác.
-- Tạo file `CONTRIBUTING.md` với quy ước đóng góp.
-
-Bạn muốn tôi cập nhật README theo hướng nào tiếp theo?
