@@ -12,6 +12,7 @@ with app.app_context():
     # Tìm người dùng
     nhanvien = NguoiDung.query.filter_by(TenDangNhap='nhanvien1').first()
     quanly = NguoiDung.query.filter_by(TenDangNhap='quanly1').first()
+    thuckhach =NguoiDung.query.filter_by(TenDangNhap='thuckhach1').first()
 
     if nhanvien:
         # Đặt lại mật khẩu đã được băm
@@ -26,6 +27,11 @@ with app.app_context():
         print("Đã cập nhật mật khẩu cho 'quanly1'.")
     else:
         print("Không tìm thấy người dùng 'quanly1'.")
+    
+    if thuckhach:
+        # Đặt lại mật khẩu đã được băm
+        thuckhach.set_password('matkhautk1')
+        print("Đã cập nhật mật khẩu cho 'thuckhach1'.")
 
     # Lưu thay đổi vào database
     db.session.commit()
